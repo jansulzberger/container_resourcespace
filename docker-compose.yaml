@@ -10,6 +10,7 @@ services:
     volumes:
       - ./src:/var/www/html
       - ./apache/ssl:/etc/apache2/ssl
+      - ./plugins/wordpress_image:/var/www/html/plugins/wordpress_image
       - ./apache/conf/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf
       - ./apache/conf/php.ini:/usr/local/etc/php/php.ini
     depends_on:

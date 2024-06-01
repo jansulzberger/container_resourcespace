@@ -1,0 +1,9 @@
+name: wordpress_image
+title: Wordpress Image Sync
+author: Jan Sulzberger
+version: 1.0
+desc: Bilder von Resourcespace nach Wordpress übertragen
+icon: fa fa-tags
+config_url: /plugins/wordpress_image/pages/setup.php
+category: asset processing
+info_url: https://sulze.online

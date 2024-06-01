@@ -1,10 +1,10 @@
 #!/usr/bin/env zsh
 
 docker compose down --remove-orphans
-docker volume rm resourcespace_db
-docker image rm resourcespace-server
+docker volume rm container_resourcespace_db
+docker image rm container_resourcespace-server
 rm -rf src
-if [ ! -d "apache/ssl" ]; then
+if [ ! -f "apache/ssl/localhost.crt" ]; then
   openssl req -x509 -out apache/ssl/localhost.crt -keyout apache/ssl/localhost.key \
     -newkey rsa:2048 -nodes -sha256 \
     -subj '/CN=localhost' -extensions EXT -config <( \

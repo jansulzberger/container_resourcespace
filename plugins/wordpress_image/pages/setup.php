@@ -20,7 +20,29 @@ $page_def[] = config_add_text_input(
     'wordpress_image_key',
     $lang['wordpress_image_key']
 );
+$page_def[] = config_add_section_header($lang['wordpress_image_control'],$lang['wordpress_image_control_description']);
 
+$page_def[] = config_add_text_input(
+    'wordpress_image_collection_length',
+    $lang['wordpress_image_collection_length']
+);
+
+$page_def[] = config_add_section_header($lang['wordpress_image_openai_header'],$lang['wordpress_image_openai_description']);
+
+$page_def[] = config_add_text_input(
+    'wordpress_image_openai_url',
+    $lang['wordpress_image_openai_url']
+);
+
+$page_def[] = config_add_text_input(
+    'wordpress_image_openai_user',
+    $lang['wordpress_image_openai_user']
+);
+
+$page_def[] = config_add_text_input(
+    'wordpress_image_openai_key',
+    $lang['wordpress_image_openai_key']
+);
 // Do the page generation ritual -- don't change this section.
 config_gen_setup_post($page_def, $plugin_name);
 include '../../../include/header.php';

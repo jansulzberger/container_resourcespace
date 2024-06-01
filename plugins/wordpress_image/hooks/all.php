@@ -4,6 +4,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+include get_plugin_path('wordpress_image') . '/include/CollectionManager.php';
+include get_plugin_path('wordpress_image') . '/include/WordpressManager.php';
+
 
 /**
  * @param $ref
@@ -13,9 +16,12 @@ error_reporting(E_ALL);
  */
 function HookWordpress_imageAllResourcecreate($ref)
 {
+    
     global $userref, $filename_field;
-    $title = "Default Title";
-    $caption = $_REQUEST['file_name'];
+    $originalFilename = $_REQUEST['file_name'];
+    $title = "Default Title " . CollectionManager::mapCollection($originalFilename);
+    $caption = $originalFilename;
+
 
 
 /*
@@ -37,43 +43,13 @@ function HookWordpress_imageAllResourcecreate($ref)
  */
 function HookWordpress_imageAllAftersaveresourcedata($ref)
 {
-    ob_start();
-    $data = get_resource_data($ref,false);
-    var_dump($data);
-    $caption = ob_get_clean();
-    update_field($ref,18,$caption);
-    $config = get_plugin_config('wordpress_image');
-    $data = get_image_sizes($ref);
-    $imageFilePath = $data[0]['path'];
-    $wordpressUrl = $config['wordpress_image_url'] . '/wp-json/wp/v2/media';
-    $username = $config['wordpress_image_user'];
-    $password = $config['wordpress_image_key'];
-
-    $ch = curl_init();
-
-    $headers = array(
-        'Authorization: Basic ' . base64_encode("$username:$password"),
-        'Content-Disposition: attachment; filename="' . basename($imageFilePath) . '"',
-    );
-    $file = new CURLFile($imageFilePath, mime_content_type($imageFilePath), basename($imageFilePath));
-    $postFields = array('file' => $file);
-
-    curl_setopt($ch, CURLOPT_URL, $wordpressUrl);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // to capture the response
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-    $response = curl_exec($ch);
-
-    if (curl_errno($ch)) {
-
-        curl_close($ch);
-        return null;
-    } else {
-        $result = json_decode($response, true);
-        curl_close($ch);
-        return $result['id'];
+    $wpid = get_data_by_field($ref, 88);
+    if(!$wpid){
+        $wpId = WordpressManager::upload($ref);
+        if($wpId) {
+            update_field($ref, 88, $wpId);
+        }
     }
+    WordpressManager::update($ref);
 
 }

@@ -5,9 +5,11 @@ class WordpressManager
 
     public static function update($ref):bool{
         $config = get_plugin_config('wordpress_image');
-        $data = [
+        $postFields = [
             'title' => get_data_by_field($ref, 8),
-            'caption' => get_data_by_field($ref, 18)
+            'caption' => get_data_by_field($ref, 18),
+            'alt' => get_data_by_field($ref, 18),
+            'description' => get_data_by_field($ref, 18)
         ];
 
 
@@ -21,7 +23,6 @@ class WordpressManager
             'Authorization: Basic ' . base64_encode("$username:$password"),
             'Content-Type: application/json',
         );
-        $postFields = array('title' => $data['title'], 'caption' => $data['caption']);
 
         curl_setopt($ch, CURLOPT_URL, $wordpressUrl);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');

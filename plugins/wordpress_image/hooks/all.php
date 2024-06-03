@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 
 include get_plugin_path('wordpress_image') . '/include/CollectionManager.php';
 include get_plugin_path('wordpress_image') . '/include/WordpressManager.php';
+include get_plugin_path('wordpress_image') . '/include/OpenaiManger.php';
 
 
 /**
@@ -19,21 +20,11 @@ function HookWordpress_imageAllResourcecreate($ref)
     
     global $userref, $filename_field;
     $originalFilename = $_REQUEST['file_name'];
-    $title = "Default Title " . CollectionManager::mapCollection($originalFilename);
-    $caption = $originalFilename;
+    $collection = CollectionManager::mapCollection($originalFilename);
+    //$example = OpenaiManger::prompt('write a blind text with 100 words');
 
-
-
-/*
-    if ($resource_data) {
-
-        $caption =  $resource_data['original_filename'];
-    }*/
-
-    // Update the resource field
-    // Note: Field 8 is the default field for titles, change it if necessary
-    update_field($ref, 8, $title);
-    update_field($ref, 18, $caption);
+    update_field($ref, 8, $originalFilename);
+    update_field($ref, 18, 'This is a description');
 }
 
 /**
